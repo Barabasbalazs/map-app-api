@@ -5,9 +5,13 @@ const schema = {
   required: ["PORT"],
   properties: {
     PORT: {
-      type: "string",
+      type: "number",
       default: 8080,
     },
+    ENVIRONMENT: {
+      type: "string",
+      default: "dev",
+    }
   },
 };
 

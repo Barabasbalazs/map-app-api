@@ -1,32 +1,11 @@
 import Fastify from "fastify";
 import { fastifyEnv, options } from "./plugins/config.js";
+import { logger } from "./plugins/logger.js";
+import router from "./routes/index.js";
 
-
-const fastify = Fastify({
-  logger: {
-    serializers: {
-        req(request) {
-            return {
-            method: request.method,
-            url: request.url,
-            params: request.params,
-            };
-        },
-        res(reply) {
-            return {
-            statusCode: reply.statusCode,
-            };
-        },
-    }
-  },
-});
-
-fastify.get("/", async (request, reply) => {
-  return { hello: "world1" };
-});
+const fastify = Fastify({ logger });
 
 fastify.register(fastifyEnv, options);
-//this will be called once all the plugins have been loaded
 await fastify.after();
 
 const start = async () => {

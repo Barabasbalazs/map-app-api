@@ -16,12 +16,13 @@
     "@types/node": "^20.11.16",
     "@typescript-eslint/eslint-plugin": "^6.20.0",
     "eslint": "^8.56.0",
-    "typescript": "^5.3.3",
-    "tsc-watch": "^6.0.0"
+    "tsc-watch": "^6.0.0",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
     "@fastify/env": "^4.3.0",
-    "fastify": "^4.26.0"
+    "fastify": "^4.26.0",
+    "pino-pretty": "^10.3.1"
   },
   "type": "module"
 }
