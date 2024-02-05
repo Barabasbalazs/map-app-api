@@ -8,7 +8,7 @@ const { signupSchema } = authSchema;
 const authRouter = async (fastify: FastifyInstance) => {
   fastify.setErrorHandler(function (error, request, reply) {
    
-    reply.status(500).send({ ok: 'man' })
+    reply.status(500).send({ ok: 'man2' })
   
   });
   fastify.route({
