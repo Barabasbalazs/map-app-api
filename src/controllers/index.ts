@@ -1,4 +1,4 @@
-import authController from "./auth-controller.js"
+import authController from "./auth/auth-controller.js"
 
 const controller = {
     authController

@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import statusCodes from "../helpers/status-codes.js";
+import statusCodes from "../../constants/status-codes.js";
 
 const { ERROR400 } = statusCodes;
 
