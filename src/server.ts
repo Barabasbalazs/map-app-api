@@ -3,16 +3,17 @@ import { fastifyEnv, options } from "./plugins/config.js";
 import { logger } from "./plugins/logger.js";
 import router from "./routes/index.js";
 
-const fastify = Fastify({ logger });
+const server = Fastify({ logger });
 
-fastify.register(fastifyEnv, options);
-await fastify.after();
+server.register(fastifyEnv, options);
+server.register(router, { prefix: "/v1" });
+await server.after();
 
 const start = async () => {
   try {
-    await fastify.listen({ port: Number(process.env.PORT) || 8080 });
+    await server.listen({ port: Number(process.env.PORT) || 8080 });
   } catch (err) {
-    fastify.log.error(err);
+    server.log.error(err);
   }
 };
 

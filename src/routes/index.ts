@@ -1,8 +1,8 @@
-import { FastifyInstance, RouteHandler, RouteOptions } from "fastify"
+import { FastifyInstance } from "fastify";
+import authRouter from "./auth/router.js";
 
-export default function router (fastify: FastifyInstance, opts: RouteOptions, done: RouteHandler) {
-    fastify.get("/", async (request, reply) => {
-        return { hello: "world1" };
-      });
-  }
-  
+const router = async (fastify: FastifyInstance) => {
+  fastify.register(authRouter, { prefix: "/auth" });
+};
+
+export default router;
