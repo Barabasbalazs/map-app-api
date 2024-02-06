@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import controller from "../../controllers/index.js";
-import authSchema from "./schema.js";
+import authSchema from "./auth-schema.js";
 
 const { authController } = controller;
 const { signupSchema } = authSchema;
