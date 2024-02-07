@@ -13,7 +13,11 @@ async function mongoosePlugin(
     if (connection) {
       fastify.log.info("Connected to DB");
     }
-    fastify.decorate("db", connection);
+    fastify.decorate("db", {
+      getter() {
+        return connection;
+      },
+    });
   } catch (error) {
     fastify.log.error("Error connecting to DB", error);
     process.exit(1);

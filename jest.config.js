@@ -1,6 +1,6 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 export default {
-  preset: 'ts-jest',
+  preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
   coverageProvider: 'v8',
   coverageDirectory: '<rootDir>/coverage',
@@ -9,7 +9,10 @@ export default {
   coverageReporters: ["text", "json", "html"],
   testPathIgnorePatterns: ['<rootDir>/node_modules', '<rootDir>/build'],
   transform: {
-    "<rootDir>/node_modules/variables/.+\\.(j|t)sx?$": "ts-jest"
+    "<rootDir>/node_modules/variables/.+\\.(j|t)sx?$": "ts-jest",
+  },
+  moduleNameMapper: {
+    "^(\\.\\.?\\/.+)\\.jsx?$": "$1"
   },
   transformIgnorePatterns: [
     "<rootDir>/node_modules/(?!variables/.*)"
