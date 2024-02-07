@@ -24,4 +24,4 @@ const logger = pino({
   },
 });
 
-export { logger };
+export default logger;

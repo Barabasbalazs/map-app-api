@@ -1,17 +1,15 @@
 import Fastify from "fastify";
-import fp from "fastify-plugin";
-import { fastifyEnv, options } from "./plugins/config.js";
-import { logger } from "./plugins/logger.js";
+import fastifyEnv from "@fastify/env";
+import configOptions from "./plugins/config.js";
+import logger from "./plugins/logger.js";
 import mongoosePlugin from "./plugins/db-connection.js";
 import router from "./routes/index.js";
-import statusCodes from "./constants/status-codes.js";
+import { ERROR400 } from "./constants/status-codes.js";
 import { replaceSlashesWithDots } from "./utils/string-formaters.js";
-
-const { ERROR400 } = statusCodes;
 
 const server = Fastify({ logger });
 
-//the default error handler
+//global error handler
 server.setErrorHandler((error, _request, reply) => {
   //validation errors overwwrite
   if (error.code === "FST_ERR_VALIDATION") {
@@ -23,10 +21,10 @@ server.setErrorHandler((error, _request, reply) => {
   }
 });
 
-server.register(fastifyEnv, options);
+await server.register(fastifyEnv, configOptions);
+
 server.register(router, { prefix: "/v1" });
-await server.after();
-server.register(fp(mongoosePlugin), {
+server.register(mongoosePlugin, {
   mongoDBUri: process.env.MONGODB_URI,
 });
 

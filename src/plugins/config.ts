@@ -1,5 +1,3 @@
-import fastifyEnv from "@fastify/env";
-
 const schema = {
   type: "object",
   required: ["PORT"],
@@ -11,7 +9,7 @@ const schema = {
     ENVIRONMENT: {
       type: "string",
       default: "dev",
-    }
+    },
   },
 };
 
@@ -19,6 +17,7 @@ const options = {
   dotenv: true,
   schema: schema,
   data: process.env,
+  confKey: "config",
 };
 
-export { fastifyEnv, options };
+export default options;

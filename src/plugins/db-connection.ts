@@ -1,4 +1,5 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
+import fp from "fastify-plugin";
 import mongoose from "mongoose";
 
 mongoose.set("strictQuery", true);
@@ -19,4 +20,4 @@ async function mongoosePlugin(
   }
 }
 
-export default mongoosePlugin;
+export default fp(mongoosePlugin);

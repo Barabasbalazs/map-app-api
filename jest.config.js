@@ -4,7 +4,7 @@ export default {
   testEnvironment: 'node',
   coverageProvider: 'v8',
   coverageDirectory: '<rootDir>/coverage',
-  coveragePathIgnorePatterns: ['<rootDir>/node_modules', '<rootDir>/build'],
+  coveragePathIgnorePatterns: ['<rootDir>/node_modules', '<rootDir>/build', '<rootDir>/src/constants'],
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
   coverageReporters: ["text", "json", "html"],
   testPathIgnorePatterns: ['<rootDir>/node_modules', '<rootDir>/build'],
