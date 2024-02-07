@@ -1,5 +1,5 @@
 {
-  "name": "socket-api",
+  "name": "map-app-api",
   "version": "1.0.0",
   "description": "API for all DB related operations in Map-App",
   "main": "server.js",
