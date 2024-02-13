@@ -13,6 +13,7 @@ async function createServerInstance() {
 
   //global error handler
   server.setErrorHandler((error, _request, reply) => {
+
     //validation errors overwwrite
     if (error.code === "FST_ERR_VALIDATION") {
       reply.status(error.statusCode || ERROR400.statusCode).send({
@@ -21,6 +22,7 @@ async function createServerInstance() {
     } else {
       reply.send(error);
     }
+    
   });
 
   await server.register(fastifyEnv, configOptions);

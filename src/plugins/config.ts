@@ -10,6 +10,14 @@ const schema = {
       type: "string",
       default: "dev",
     },
+    SALT_ROUNDS: {
+      type: "number",
+      default: 10,
+    },
+    SECRET: {
+      type: "string",
+      default: "secret",
+    }
   },
 };
 

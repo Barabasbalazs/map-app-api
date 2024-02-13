@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
+import { setSchemaTransformer } from "../utils/mongo-schema-setter.js";
 
 export interface User extends Document {
   email: string;
@@ -6,6 +7,12 @@ export interface User extends Document {
   lastName?: string;
   password?: string;
   role: "ADMIN" | "USER";
+  id?: string;
+}
+
+export interface AuthenticatedUser {
+  user: Partial<User>;
+  authToken: string;
 }
 
 const userSchema = new Schema({
@@ -16,4 +23,4 @@ const userSchema = new Schema({
   role: { type: String, enum: ["ADMIN", "USER"], default: "USER" },
 });
 
-export default mongoose.model<User>("users", userSchema);
+export default mongoose.model<User>("users", setSchemaTransformer(userSchema));
