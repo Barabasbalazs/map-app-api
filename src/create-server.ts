@@ -4,6 +4,7 @@ import configOptions from "./plugins/config.js";
 import logger from "./plugins/logger.js";
 import mongoosePlugin from "./plugins/db-connection.js";
 import router from "./routes/index.js";
+import environmentVariables from "./config/env-variables.js";
 import { ERROR400 } from "./constants/status-codes.js";
 import { replaceSlashesWithDots } from "./utils/string-formaters.js";
 
@@ -27,10 +28,13 @@ async function createServerInstance() {
 
   await server.register(fastifyEnv, configOptions);
 
+  const testEnvironment = environmentVariables.getEnvironment() === "test";
+
   server.register(router, { prefix: "/v1" });
 
   await server.register(mongoosePlugin, {
-    mongoDBUri: process.env.MONGODB_URI,
+    mongoDBUri: testEnvironment ? environmentVariables.getMongoDBTestUri() : environmentVariables.getMongoDBUri(),
+    testEnvironment,
   });
 
   await server.after();

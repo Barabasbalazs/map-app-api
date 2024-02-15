@@ -1,9 +1,10 @@
 import userModel, { User, AuthenticatedUser } from "../../models/user-model.js";
+import environmentVariables from "../../config/env-variables.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 function createToken (id: string) {
-  const secret = process.env.SECRET || "secret";
+  const secret = environmentVariables.getSecret();
   const authToken = jwt.sign(id, secret);
   return authToken;
 }
@@ -14,7 +15,7 @@ const authService = {
   },
 
   signup: async function (user: User): Promise<AuthenticatedUser | void> {
-    const saltRounds: number = Number(process.env.SALT_ROUNDS || 10); //add this to the schema
+    const saltRounds: number = Number(environmentVariables.getSaltRounds());
     const salt = await bcrypt.genSalt(saltRounds);
     user.password = await bcrypt.hash(user.password!, salt);
     const persistedUser = await userModel.create(user);

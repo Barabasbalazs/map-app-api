@@ -17,7 +17,15 @@ const schema = {
     SECRET: {
       type: "string",
       default: "secret",
-    }
+    },
+    MONGODB_URI: {
+      type: "string",
+      default: "",
+    },
+    MONGODB_TEST_URI: {
+      type: "string",
+      default: "",
+    },
   },
 };
 
