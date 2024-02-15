@@ -1,4 +1,4 @@
-import getServer from "../../test-settings/setup-tests";
+import { getServer } from "../../test-settings/setup-tests";
 import { expect, test, describe } from "@jest/globals";
 
 const invalidUserData = [
@@ -60,12 +60,14 @@ describe("Testing the signup route", () => {
     });
     expect(response.statusCode).toBe(201);
 
-    const authenticatedUser = JSON.parse(response.payload);
+    const authenticatedResponse = JSON.parse(response.payload);
 
-    expect(authenticatedUser.user.email).toBe(validUserData[0].email);
-    expect(authenticatedUser.user.role).toBe("USER");
-    expect(authenticatedUser.authToken).toBeDefined();
-    expect(authenticatedUser.user.password).toBeUndefined();
+    const { user, authToken } = authenticatedResponse;
+
+    expect(user.email).toBe(validUserData[0].email);
+    expect(user.role).toBe("USER");
+    expect(authToken).toBeDefined();
+    expect(user.password).toBeUndefined();
   });
   test("Should return a 403 status code upon sending an already existing email", async () => {
     const server = await getServer();
