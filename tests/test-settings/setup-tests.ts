@@ -1,7 +1,6 @@
 import createServerInstance from "../../src/create-server";
 import { beforeAll, afterEach, afterAll } from "@jest/globals";
-import userModel, { User } from "../../src/models/user-model";
-import { setSchemaTransformer } from "../../src/utils/mongo-schema-setter";
+import userModel from "../../src/models/user-model";
 
 let serverPromise: Promise<any>;
 
@@ -10,8 +9,16 @@ const testUser = {
   password: "password1",
 };
 
+const hashedUser = {
+  email: "test-user@mail.com",
+  password: "$2a$10$bKrAW5/gUCVThi0z4N96Lu.BihbDvFZesCgXjAW7YfRrWA9IndbgC",
+};
+
 async function seedDatabase() {
-  await userModel.create(testUser);
+  const isUserInDb = await userModel.findOne({ email: testUser.email });
+  if (!isUserInDb) {
+    await userModel.create(hashedUser);
+  }
 }
 
 beforeAll(async () => {
