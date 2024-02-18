@@ -1,5 +1,7 @@
 import createServerInstance from "../../src/create-server";
 import { beforeAll, afterEach, afterAll } from "@jest/globals";
+import userModel, { User } from "../../src/models/user-model";
+import { setSchemaTransformer } from "../../src/utils/mongo-schema-setter";
 
 let serverPromise: Promise<any>;
 
@@ -8,19 +10,15 @@ const testUser = {
   password: "password1",
 };
 
-async function seedDatabase(server: any) {
-  await server.inject({
-    method: "POST",
-    url: "/v1/auth/signup",
-    payload: testUser,
-  });
+async function seedDatabase() {
+  await userModel.create(testUser);
 }
 
 beforeAll(async () => {
   serverPromise = (await createServerInstance()) as any;
   const server = await serverPromise;
   await server.ready();
-  await seedDatabase(server);
+  await seedDatabase();
 });
 
 afterEach(async () => {

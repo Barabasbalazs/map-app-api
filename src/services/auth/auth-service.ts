@@ -3,13 +3,35 @@ import environmentVariables from "../../config/env-variables.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-function createToken (id: string) {
+function createToken(id: string) {
   const secret = environmentVariables.getSecret();
   const authToken = jwt.sign(id, secret);
   return authToken;
 }
 
 const authService = {
+  authenticateUser: async function (
+    user: User
+  ): Promise<AuthenticatedUser | null> {
+    const storedUser = await userModel.findOne({ email: user.email });
+    if (!storedUser) {
+      return null;
+    }
+    const isPasswordMatching = await bcrypt.compare(
+      user.password!,
+      storedUser.password!
+    );
+    if (!isPasswordMatching) {
+      return null;
+    }
+    const authToken = createToken(storedUser.id);
+
+    return {
+      user: storedUser,
+      authToken: authToken,
+    };
+  },
+
   findByEmail: async function (email: string): Promise<User | null> {
     return await userModel.findOne({ email });
   },
@@ -22,7 +44,7 @@ const authService = {
     return {
       user: persistedUser,
       authToken: createToken(persistedUser.id),
-    }
+    };
   },
 };
 

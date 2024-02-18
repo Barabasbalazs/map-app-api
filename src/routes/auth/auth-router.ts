@@ -7,7 +7,10 @@ const { authController } = controller;
 const { signupSchema } = authSchema;
 
 const authRouter = async (fastify: FastifyInstance) => {
-  fastify.route({
+  fastify.route<{
+    Body: User,
+    Reply: AuthenticatedUser
+  }>({
     method: "POST",
     url: "/login",
     handler: authController.login,

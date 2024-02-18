@@ -1,29 +1,37 @@
-import {
-  FastifyReply,
-  FastifyRequest,
-  RawServerDefault,
-  RawReplyDefaultExpression,
-  RawRequestDefaultExpression,
-} from "fastify";
+import { FastifyRequest } from "fastify";
 import { RouteGenericInterface } from "fastify/types/route";
 import authService from "../../services/auth/auth-service.js";
 import { AuthenticatedUser, User } from "../../models/user-model.js";
-import { ERROR403, ERROR500 } from "../../constants/status-codes.js";
+import { ERROR401, ERROR403, ERROR500 } from "../../constants/status-codes.js";
 import ApiReply from "src/@types/reply-types.js";
 
 interface AuthUserResponse extends RouteGenericInterface {
   Reply:
- AuthenticatedUser
+    | AuthenticatedUser
     | {
         message: string;
       };
 }
 
 const authController = {
-  login: async (request: FastifyRequest, reply: FastifyReply) => {
-    reply.status(200).send({
-      message: "hello on login",
-    });
+  login: async (
+    request: FastifyRequest<{ Body: User }>,
+    reply: ApiReply<AuthUserResponse>
+  ) => {
+    try {
+      const user = request.body;
+      const authenticatedUser = await authService.authenticateUser(user);
+      if (!authenticatedUser) {
+        reply.status(ERROR401.statusCode).send({
+          message: "Invalid credentials",
+        });
+      } else {
+        reply.status(200).send(authenticatedUser);
+      }
+    } catch (e) {
+      request.log.error(e);
+      reply.status(ERROR500.statusCode).send({ message: ERROR500.message });
+    }
   },
   signup: async (
     request: FastifyRequest<{ Body: User }>,
