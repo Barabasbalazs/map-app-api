@@ -46,4 +46,4 @@ async function getServer() {
   return await serverPromise;
 }
 
-export { getServer, testUser };
+export { getServer, testUser, hashedUser };

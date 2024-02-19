@@ -11,7 +11,7 @@
     "dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./build/server.js\"",
     "pretty-quick": "pretty-quick --pattern \"src/**/*\"",
     "format": "prettier --write ./src",
-    "test": "jest --shard",
+    "test": "jest",
     "test:coverage": "jest --shard --coverage"
   },
   "devDependencies": {
