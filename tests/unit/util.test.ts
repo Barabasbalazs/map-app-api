@@ -1,5 +1,5 @@
 import { replaceSlashesWithDots } from "../../src/utils/string-formaters";
-import { expect, test, describe } from "@jest/globals";
+import { expect, test, describe } from "vitest";
 
 describe("Testing removeSlashesandBackTicksFromString util function", () => {
   test("Should remove all slashes from a string", () => {
