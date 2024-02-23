@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
+    "start": "node ./build/server.js",
     "lint": "./node_modules/.bin/ESLint -c .eslintrc.cjs",
     "dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./build/server.js\"",
     "pretty-quick": "pretty-quick --pattern \"src/**/*\"",
