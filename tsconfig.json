@@ -67,8 +67,6 @@
         /* Experimental Options */
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "noEmit": true,
-        "allowImportingTsExtensions": true,
     },
     "include": [
         "./src/**/*.ts",
