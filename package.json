@@ -2,7 +2,7 @@
   "name": "map-app-api",
   "version": "1.0.0",
   "description": "API for all DB related operations in Map-App",
-  "main": "server.js",
+  "main": "build/server.js",
   "author": "Barabas Balazs",
   "license": "MIT",
   "scripts": {
@@ -11,8 +11,9 @@
     "dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./build/server.js\"",
     "pretty-quick": "pretty-quick --pattern \"src/**/*\"",
     "format": "prettier --write ./src",
-    "test": "vitest",
-    "test:coverage": "vitest --coverage"
+    "test": "vitest run && node ./tests/cleanUpScript.js",
+    "test:coverage": "vitest --coverage",
+    "clean-test-db": "node ./tests/cleanUpScript.js"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
