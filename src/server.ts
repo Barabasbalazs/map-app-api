@@ -5,7 +5,7 @@ const server = await createServerInstance();
 
 const start = async () => {
    try {
-     await server.listen({ port: Number(environmentVariables.getPort()), host: '0.0.0.0' });
+     await server.listen({ port: Number(environmentVariables.getPort()), host: '::' });
    } catch (err) {
      server.log.error(err);
      process.exit(1);
