@@ -17,6 +17,9 @@ const environmentVariables = {
   getPort: () => {
     return process.env.PORT || 8080;
   },
+  getFrontendUrl: () => {
+    return process.env.FRONTEND_URL || "http://localhost:5173";
+  }
 };
 
 export default environmentVariables;

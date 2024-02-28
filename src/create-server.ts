@@ -1,6 +1,8 @@
 import Fastify from "fastify";
 import fastifyEnv from "@fastify/env";
-import configOptions from "./plugins/config.js";
+import fastifyCors from "@fastify/cors";
+import configOptions from "./plugins/options/config.js";
+import corsOptions from "./plugins/options/cors.js";
 import logger from "./plugins/logger.js";
 import mongoosePlugin from "./plugins/db-connection.js";
 import router from "./routes/index.js";
@@ -28,9 +30,11 @@ async function createServerInstance() {
 
   await server.register(fastifyEnv, configOptions);
 
-  const testEnvironment = environmentVariables.getEnvironment() === "test";
-
   server.register(router, { prefix: "/v1" });
+
+  server.register(fastifyCors, corsOptions);
+
+  const testEnvironment = environmentVariables.getEnvironment() === "test";
 
   await server.register(mongoosePlugin, {
     mongoDBUri: testEnvironment ? environmentVariables.getMongoDBTestUri() : environmentVariables.getMongoDBUri(),

@@ -28,3 +28,6 @@ build
 *.njsproj
 *.sln
 *.sw?
+
+Dockerfile
+/tests/cleanUpScript.js
