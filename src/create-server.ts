@@ -5,6 +5,7 @@ import configOptions from "./plugins/options/config.js";
 import corsOptions from "./plugins/options/cors.js";
 import logger from "./plugins/logger.js";
 import mongoosePlugin from "./plugins/db-connection.js";
+import authPlugin from "./plugins/auth.js";
 import router from "./routes/index.js";
 import environmentVariables from "./config/env-variables.js";
 import { ERROR400 } from "./constants/status-codes.js";
@@ -30,6 +31,7 @@ async function createServerInstance() {
 
   await server.register(fastifyEnv, configOptions);
 
+  await server.register(authPlugin);
   server.register(router, { prefix: "/v1" });
 
   server.register(fastifyCors, corsOptions);

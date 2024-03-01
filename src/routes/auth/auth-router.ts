@@ -24,6 +24,14 @@ const authRouter = async (fastify: FastifyInstance) => {
     schema: signupSchema,
     handler: authController.signup,
   });
+  /*
+  fastify.route({
+    method: "GET",
+    url: "/test",
+    onRequest: fastify.asyncVerifyJWT,
+    handler: authController.test,
+  });
+  */
 };
 
 export default authRouter;

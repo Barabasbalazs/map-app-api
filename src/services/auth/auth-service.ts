@@ -46,6 +46,11 @@ const authService = {
       authToken: createToken(persistedUser.id),
     };
   },
+  getUserFromToken: async function (token: string, secret: string) {
+    const userId = jwt.verify(token, secret) as string;
+    const user = await userModel.findById(userId);
+    return user;
+  }
 };
 
 export default authService;

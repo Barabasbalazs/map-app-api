@@ -1,4 +1,4 @@
-import { FastifyRequest } from "fastify";
+import {  FastifyRequest, FastifyReply } from "fastify";
 import { RouteGenericInterface } from "fastify/types/route";
 import authService from "../../services/auth/auth-service.js";
 import { AuthenticatedUser, User } from "../../models/user-model.js";
@@ -55,6 +55,14 @@ const authController = {
       reply.status(ERROR500.statusCode).send({ message: ERROR500.message });
     }
   },
+  /*
+  test: async (
+    _request: FastifyRequest,
+    reply: FastifyReply
+  ) => {
+    reply.status(200).send({ message: "Authenticated yuhu" });
+  }
+  */
 };
 
 export default authController;

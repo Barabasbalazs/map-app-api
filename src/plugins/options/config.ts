@@ -6,9 +6,9 @@ const schema = {
       type: "number",
       default: 8080,
     },
-    ENVIRONMENT: {
+    NODE_ENV: {
       type: "string",
-      default: "dev",
+      default: "development",
     },
     SALT_ROUNDS: {
       type: "number",

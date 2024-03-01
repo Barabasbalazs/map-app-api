@@ -19,7 +19,7 @@ export default <Environment>{
   name: "custom-test-environment",
   transformMode: "web",
   async setup() {
-    const server = (await createServerInstance()) as any;
+    const server = (await createServerInstance());
     await server.ready();
 
     await seedDatabase();

@@ -1,6 +1,6 @@
 const environmentVariables = {
   getEnvironment: () => {
-    return process.env.NODE_ENV || "dev";
+    return process.env.NODE_ENV || "development";
   },
   getSecret: () => {
     return process.env.SECRET || "123456789";
