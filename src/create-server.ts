@@ -9,7 +9,7 @@ import authPlugin from "./plugins/auth.js";
 import router from "./routes/index.js";
 import environmentVariables from "./config/env-variables.js";
 import { ERROR400 } from "./constants/status-codes.js";
-import { replaceSlashesWithDots } from "./utils/string-formaters.js";
+import { formatValidationErrorMessage} from "./utils/string-formaters.js";
 
 async function createServerInstance() {
   
@@ -20,8 +20,9 @@ async function createServerInstance() {
 
     //validation errors overwwrite
     if (error.code === "FST_ERR_VALIDATION") {
+      server.log.error(error.message);
       reply.status(error.statusCode || ERROR400.statusCode).send({
-        message: replaceSlashesWithDots(error.message) || ERROR400.message,
+        message: formatValidationErrorMessage(error.message) || ERROR400.message,
       });
     } else {
       reply.send(error);

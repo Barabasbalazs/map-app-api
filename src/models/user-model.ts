@@ -3,8 +3,7 @@ import { setSchemaTransformer } from "../utils/mongo-schema-setter.js";
 
 export interface User extends Document {
   email: string;
-  firstName?: string;
-  lastName?: string;
+  name?: string;
   password?: string;
   role: "admin" | "user" | "guide";
   id?: string;
@@ -17,8 +16,7 @@ export interface AuthenticatedUser {
 
 const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
-  firstName: { type: String },
-  lastName: { type: String },
+  name: { type: String },
   password: { type: String, required: true },
   role: { type: String, enum: ["admin", "user", "guide"], default: "user" },
 });
