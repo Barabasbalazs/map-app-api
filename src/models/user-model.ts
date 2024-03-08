@@ -6,7 +6,7 @@ export interface User extends Document {
   firstName?: string;
   lastName?: string;
   password?: string;
-  role: "ADMIN" | "USER";
+  role: "admin" | "user" | "guide";
   id?: string;
 }
 
@@ -20,7 +20,7 @@ const userSchema = new Schema({
   firstName: { type: String },
   lastName: { type: String },
   password: { type: String, required: true },
-  role: { type: String, enum: ["ADMIN", "USER"], default: "USER" },
+  role: { type: String, enum: ["admin", "user", "guide"], default: "user" },
 });
 
 export default mongoose.model<User>("users", setSchemaTransformer(userSchema));

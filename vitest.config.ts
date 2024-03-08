@@ -22,7 +22,8 @@ export default defineConfig({
         "src/config",
         "src/server.ts",
         "test/settings",
-        "html/"
+        "html/",
+        "src/plugins/options"
     ],
       //if true report will be generated even if tests fail
       reportOnFailure: true,

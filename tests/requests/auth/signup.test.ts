@@ -31,7 +31,7 @@ describe("Testing the signup route", () => {
     const { user, authToken } = authenticatedResponse;
 
     expect(user.email).toBe(validUserData[0].email);
-    expect(user.role).toBe("USER");
+    expect(user.role).toBe("user");
     expect(authToken).toBeDefined();
     expect(user.password).toBeUndefined();
   });

@@ -1,8 +1,9 @@
 import { S } from "fluent-json-schema";
 
 const ROLES = {
-  ADMIN: "ADMIN",
-  USER: "USER",
+  ADMIN: "admin",
+  USER: "user",
+  GUIDE: "guide",
 };
 
 const authSchema = {

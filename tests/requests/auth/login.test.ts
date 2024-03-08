@@ -23,7 +23,7 @@ describe("Testing the login route", () => {
 
     expect(user.email).toBe(testUser.email);
     expect(authToken).toBeDefined();
-    expect(user.role).toBe("USER");
+    expect(user.role).toBe("user");
   });
   test("Should return 401 upon sending invalid credentials", async () => {
     invalidCredentials.forEach(async (invalidUser) => {
