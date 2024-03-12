@@ -6,11 +6,19 @@ import {
 } from "fastify";
 import { RouteGenericInterface } from "fastify/types/route";
 
-type ApiReply<T extends RouteGenericInterface> = FastifyReply<
+interface TypedResponse<T> extends RouteGenericInterface {
+  Reply:
+    | T
+    | {
+        message: string;
+      };
+}
+
+type ApiReply<T> = FastifyReply<
   RawServerDefault,
   RawRequestDefaultExpression,
   RawReplyDefaultExpression,
-  T
+  TypedResponse<T>
 >;
 
-export default ApiReply
+export default ApiReply;

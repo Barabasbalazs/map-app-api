@@ -1,7 +1,8 @@
-import { expect, test, describe, afterAll, beforeAll } from "vitest";
+import { expect, test, describe, afterAll } from "vitest";
 import { cleanOutDb } from "../../settings/utils";
-import { testUser, invalidCredentials } from "../../settings/constants";
+import { normalUser, invalidCredentials } from "../../settings/constants";
 
+// @ts-ignore
 const server = global.server;
 
 afterAll(async () => {
@@ -13,7 +14,7 @@ describe("Testing the login route", () => {
     const response = await server.inject({
       method: "POST",
       url: "/v1/auth/login",
-      payload: testUser,
+      payload: normalUser,
     });
     expect(response.statusCode).toBe(200);
     expect(response.payload).toBeDefined();
@@ -21,7 +22,7 @@ describe("Testing the login route", () => {
     const authenticatedResponse = JSON.parse(response.payload);
     const { user, authToken } = authenticatedResponse;
 
-    expect(user.email).toBe(testUser.email);
+    expect(user.email).toBe(normalUser.email);
     expect(authToken).toBeDefined();
     expect(user.role).toBe("user");
   });
@@ -32,7 +33,7 @@ describe("Testing the login route", () => {
         url: "/v1/auth/login",
         payload: invalidUser,
       });
-      expect(response.statusCode).toBe(401);
+      expect(response.statusCode).toBe(400);
     });
   });
 });

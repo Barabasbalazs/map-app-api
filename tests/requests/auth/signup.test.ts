@@ -5,6 +5,7 @@ import {
 } from "vitest";
 import { invalidUserData, validUserData } from "../../settings/constants";
 
+// @ts-ignore
 const server = global.server;
 
 describe("Testing the signup route", () => {

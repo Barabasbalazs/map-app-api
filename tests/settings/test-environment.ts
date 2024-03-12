@@ -1,14 +1,16 @@
 import type { Environment } from "vitest";
 import { cleanOutDb } from "./utils.js";
-import { testUser, hashedUser } from "./constants.js";
+import { adminUser, hashedAdminUser, normalUser, hashedUser } from "./constants.js";
 import createServerInstance from "../../src/create-server.js";
 import userModel from "../../src/models/user-model.js";
 
 async function seedDatabase() {
-  const isUserInDb = await userModel.findOne({ email: testUser.email });
-  if (!isUserInDb) {
+  const isUserInDb = await userModel.findOne({ email: normalUser.email });
+  const isAdminInDb = await userModel.findOne({ email: adminUser.email });
+  if (!isUserInDb && !isAdminInDb) {
     try {
       await userModel.create(hashedUser);
+      await userModel.create(hashedAdminUser);
     } catch (error) {
       await cleanOutDb(global.server);
     }

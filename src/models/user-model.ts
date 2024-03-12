@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
-import { setSchemaTransformer } from "../utils/mongo-schema-setter.js";
+import { userSchemaTransformer } from "../utils/mongo-schema-transformers.js";
 
 export interface User extends Document {
   email: string;
@@ -7,6 +7,7 @@ export interface User extends Document {
   password?: string;
   role: "admin" | "user" | "guide";
   id?: string;
+  trails: [{ type: Schema.Types.ObjectId; ref: "Trail" }];
 }
 
 export interface AuthenticatedUser {
@@ -19,6 +20,14 @@ const userSchema = new Schema({
   name: { type: String },
   password: { type: String, required: true },
   role: { type: String, enum: ["admin", "user", "guide"], default: "user" },
-});
+  trails: [{ type: Schema.Types.ObjectId, ref: "Trail" }],
+},
+{
+  timestamps: true,
+  toJSON: {
+    transform: (doc, ret, options) => userSchemaTransformer(doc, ret, options),
+  }
+}
+);
 
-export default mongoose.model<User>("users", setSchemaTransformer(userSchema));
+export default mongoose.model<User>("users", userSchema);

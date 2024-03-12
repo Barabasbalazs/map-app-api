@@ -4,7 +4,7 @@ import authSchema from "./auth-schema.js";
 import { AuthenticatedUser, User } from "../../models/user-model.js";
 
 const { authController } = controller;
-const { signupSchema } = authSchema;
+const { signupSchema, loginSchema } = authSchema;
 
 const authRouter = async (fastify: FastifyInstance) => {
   fastify.route<{
@@ -13,6 +13,7 @@ const authRouter = async (fastify: FastifyInstance) => {
   }>({
     method: "POST",
     url: "/login",
+    schema: loginSchema,
     handler: authController.login,
   });
   fastify.route<{
@@ -24,14 +25,6 @@ const authRouter = async (fastify: FastifyInstance) => {
     schema: signupSchema,
     handler: authController.signup,
   });
-  /*
-  fastify.route({
-    method: "GET",
-    url: "/test",
-    onRequest: fastify.asyncVerifyJWT,
-    handler: authController.test,
-  });
-  */
 };
 
 export default authRouter;
