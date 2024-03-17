@@ -1,5 +1,6 @@
 import { FastifyRequest } from "fastify";
 import { Trail } from "../../models/trail-model.js";
+import { User } from "../../models/user-model.js";
 import ApiReply from "src/@types/reply-types.js";
 import { TrailQuery } from "../../@types/trail-query-type.js";
 import {
@@ -76,11 +77,7 @@ const trailsController = {
           .status(ERROR404.statusCode)
           .send({ message: ERROR404.message });
       }
-      request.log.info(
-        `persistedTrail.creator ${persistedTrail.creator.toString()}`
-      );
-      request.log.info(`user.id ${user.id}`);
-      if (persistedTrail.creator.toString() !== user.id) {
+      if ((persistedTrail.creator as User)._id.toString() !== user.id) {
         return reply.status(ERROR401.statusCode).send({
           message: "You are not authorized to update this trail",
         });
@@ -199,7 +196,7 @@ const trailsController = {
           .status(ERROR404.statusCode)
           .send({ message: ERROR404.message });
       }
-      if (persistedTrail.creator.toString() !== user.id) {
+      if ((persistedTrail.creator as User)._id.toString() !== user.id) {
         return reply.status(ERROR401.statusCode).send({
           message: "You are not authorized to delete this trail",
         });

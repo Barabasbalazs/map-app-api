@@ -9,3 +9,8 @@ export function userSchemaTransformer(_doc: any, ret: any, _options: any) {
   delete ret.trails;
   baseTransformer(_doc, ret, _options);
 }
+
+export function trailSchemaTransformer(doc: any, ret: any, _options: any) {
+  delete ret.users;
+  baseTransformer(doc, ret, _options);
+}

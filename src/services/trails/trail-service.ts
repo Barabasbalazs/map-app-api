@@ -9,10 +9,10 @@ const trailsService = {
     if (!storedTrail) {
       return null;
     }
-    return storedTrail;
+    return await storedTrail.populate("creator");
   },
   getTrailById: async function (id: string): Promise<Trail | null> {
-    const trail = await trailModel.findById(id);
+    const trail = await trailModel.findById(id).populate("creator");
     if (!trail) {
       return null;
     }
@@ -49,45 +49,60 @@ const trailsService = {
       });
     }
 
+    stages.push({
+      $lookup: {
+        from: "users",
+        localField: "creator",
+        foreignField: "_id",
+        as: "creator",
+      },
+    });
+
     return await trailModel.aggregate(stages);
   },
   updateTrail: async function (
     id: string,
     trail: Partial<Trail>
   ): Promise<Trail | null> {
-    const updatedTrail = await trailModel.findOneAndUpdate(
-      { _id: id },
-      {
-        $set: trail,
-      },
-      {
-        new: true,
-      }
-    );
+    const updatedTrail = await trailModel
+      .findOneAndUpdate(
+        { _id: id },
+        {
+          $set: trail,
+        },
+        {
+          new: true,
+        }
+      )
+      .populate("creator");
     if (!updatedTrail) {
       return null;
     }
     return updatedTrail;
   },
   deleteTrail: async function (id: string): Promise<Trail | null> {
-    return await trailModel.findByIdAndDelete(id);
+    return await trailModel.findByIdAndDelete(id).populate("creator");
   },
   deleteUserFromTrail: async function (
     trailId: string,
-    userId: string,
+    userId: string
   ): Promise<Trail | null> {
-    return await trailModel.findOneAndUpdate(
-      { _id: trailId },
-      { $pull: { users: new ObjectId(userId) } },
-      { new: true }
-    );
+    return await trailModel
+      .findOneAndUpdate(
+        { _id: trailId },
+        { $pull: { users: new ObjectId(userId) } },
+        { new: true }
+      )
+      .populate("creator");
   },
   addUserToTrail: async function (userId: string, trailId: string) {
-    return await trailModel.findOneAndUpdate(
-      { _id: trailId },
-      { $push: { users: new ObjectId(userId) } },
-      { new: true }
-    );
+    return await trailModel
+      .findOneAndUpdate(
+        { _id: trailId },
+        { $push: { users: new ObjectId(userId) } },
+        { new: true }
+      )
+      .populate("creator");
   },
 };
 
