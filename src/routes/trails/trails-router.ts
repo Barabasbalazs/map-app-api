@@ -4,7 +4,12 @@ import trailSchema from "./trails-schema.js";
 import trailsController from "../../controllers/trails/trails-controller.js";
 import { TrailQuery } from "src/@types/trail-query-type";
 
-const { createTrailSchema, queryTrailsSchema, updateTrailSchema } = trailSchema;
+const {
+  createTrailSchema,
+  queryTrailsSchema,
+  updateTrailSchema,
+  trailIdSchema,
+} = trailSchema;
 
 const trailsRouter = async (fastify: FastifyInstance) => {
   //getting the trails for users
@@ -54,31 +59,29 @@ const trailsRouter = async (fastify: FastifyInstance) => {
     url: "/:id",
     onRequest: fastify.asyncVerifyJWT,
     schema: updateTrailSchema,
-    handler: trailsController.updateTrail
+    handler: trailsController.updateTrail,
   });
   //Deleting the trail by id, for creators of the trail
   fastify.route<{
     Params: { id: string };
-    Reply: Trail;
+    Reply: { message: string };
   }>({
     method: "DELETE",
     url: "/:id",
     onRequest: fastify.asyncVerifyJWT,
-    handler: async () => {
-      return;
-    },
+    schema: trailIdSchema,
+    handler: trailsController.deleteTrail,
   });
   //subscribing to a trail for users
   fastify.route<{
     Params: { id: string };
     Reply: Trail;
   }>({
-    method: "POST",
+    method: "PATCH",
     url: "/:id/subscribe",
     onRequest: fastify.asyncVerifyJWT,
-    handler: async () => {
-      return;
-    },
+    schema: trailIdSchema,
+    handler: trailsController.subscribeToTrail,
   });
   //unsubscribing from a trail for users
   fastify.route<{
@@ -88,9 +91,8 @@ const trailsRouter = async (fastify: FastifyInstance) => {
     method: "DELETE",
     url: "/:id/unsubscribe",
     onRequest: fastify.asyncVerifyJWT,
-    handler: async () => {
-      return;
-    },
+    schema: trailIdSchema,
+    handler: trailsController.unsubscribeFromTrail,
   });
 };
 

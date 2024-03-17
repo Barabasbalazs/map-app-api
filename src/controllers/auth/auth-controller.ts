@@ -1,8 +1,9 @@
-import {  FastifyRequest } from "fastify";
+import { FastifyRequest } from "fastify";
 import authService from "../../services/auth/auth-service.js";
 import { AuthenticatedUser, User } from "../../models/user-model.js";
 import { ERROR401, ERROR403, ERROR500 } from "../../constants/status-codes.js";
-import ApiReply from "src/@types/reply-types.js";
+import ApiReply from "../../@types/reply-types.js";
+import { sendServerError } from "../../utils/controller-util.js";
 
 const authController = {
   login: async (
@@ -20,8 +21,7 @@ const authController = {
         reply.status(200).send(authenticatedUser);
       }
     } catch (e) {
-      request.log.error(e);
-      reply.status(ERROR500.statusCode).send({ message: ERROR500.message });
+      sendServerError(request.log, reply, e);
     }
   },
   signup: async (
@@ -43,7 +43,7 @@ const authController = {
         reply.status(201).send(newAuthenticatedUser);
       }
     } catch (e) {
-      reply.status(ERROR500.statusCode).send({ message: ERROR500.message });
+      sendServerError(request.log, reply, e);
     }
   },
 };

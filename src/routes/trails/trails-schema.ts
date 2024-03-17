@@ -54,6 +54,11 @@ const trailSchema = {
     params: S.object().prop("id", S.string().required()),
     headers: S.object(),
   },
+  trailIdSchema: {
+    queryString: S.object(),
+    params: S.object().prop("id", S.string().required()),
+    headers: S.object(),
+  }
 };
 
 export default trailSchema;

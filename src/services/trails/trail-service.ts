@@ -69,6 +69,26 @@ const trailsService = {
     }
     return updatedTrail;
   },
+  deleteTrail: async function (id: string): Promise<Trail | null> {
+    return await trailModel.findByIdAndDelete(id);
+  },
+  deleteUserFromTrail: async function (
+    trailId: string,
+    userId: string,
+  ): Promise<Trail | null> {
+    return await trailModel.findOneAndUpdate(
+      { _id: trailId },
+      { $pull: { users: new ObjectId(userId) } },
+      { new: true }
+    );
+  },
+  addUserToTrail: async function (userId: string, trailId: string) {
+    return await trailModel.findOneAndUpdate(
+      { _id: trailId },
+      { $push: { users: new ObjectId(userId) } },
+      { new: true }
+    );
+  },
 };
 
 export default trailsService;
