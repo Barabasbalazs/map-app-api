@@ -20,6 +20,45 @@ const userService = {
       { new: true }
     );
   },
+  getSubscribedTrails: async function (userId: string) {
+    return await userModel.aggregate([
+      {
+        $match: { _id: new ObjectId(userId) },
+      },
+      {
+        $lookup: {
+          from: "trails",
+          localField: "trails",
+          foreignField: "_id",
+          as: "trails",
+        },
+      },
+      {
+        $unwind: "$trails",
+      },
+      {
+        $replaceRoot: { newRoot: "$trails" },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "creator",
+          foreignField: "_id",
+          as: "creator",
+        },
+      },
+      { $set: { "creator.id": { $arrayElemAt: ["$creator._id", 0] } } },
+      {
+        $unset: [
+          "creator.password",
+          "creator.trails",
+          "users",
+          "creator._id",
+          "creator.__v",
+        ],
+      },
+    ]);
+  },
 };
 
 export default userService;

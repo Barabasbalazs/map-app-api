@@ -34,21 +34,6 @@ const trailsRouter = async (fastify: FastifyInstance) => {
       schema: createTrailSchema,
       handler: trailsController.createTrail,
     });
-  //Getting the trail by id, for users who are subscribed to the trail
-  //have to decide on functionality here
-  /*
-  fastify.route<{
-    Params: { id: string };
-    Reply: Trail;
-  }>({
-    method: "GET",
-    url: "/:id",
-    onRequest: fastify.asyncVerifyJWT,
-    handler: async () => {
-      return;
-    },
-  });
-  */
   //Updating the trail by id, for creators of the trail
   fastify.route<{
     Params: { id: string };
@@ -94,6 +79,14 @@ const trailsRouter = async (fastify: FastifyInstance) => {
     schema: trailIdSchema,
     handler: trailsController.unsubscribeFromTrail,
   });
+  fastify.route<{
+    Reply: Trail[];
+  }>({
+    method: "GET",
+    url: "/subscribed",
+    onRequest: fastify.asyncVerifyJWT,
+    handler: trailsController.getSubscribedTrails,
+  })
 };
 
 export default trailsRouter;

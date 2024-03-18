@@ -12,6 +12,7 @@ import {
 import trailsService from "../../services/trails/trail-service.js";
 import userService from "../../services/user/user-service.js";
 import { sendServerError } from "../../utils/controller-util.js";
+import { request } from "http";
 
 const trailsController = {
   createTrail: async (
@@ -213,6 +214,28 @@ const trailsController = {
       sendServerError(request.log, reply, e);
     }
   },
+  getSubscribedTrails: async(
+    request: FastifyRequest,
+    reply: ApiReply<Trail[]>
+  ) => {
+    try {
+      const user = request.user;
+      if (user.role !== "user" || !user.id) {
+        return reply.status(ERROR401.statusCode).send({
+          message: "You are not authorized to get subscribed trails",
+        });
+      }
+      const trails = await userService.getSubscribedTrails(user.id);
+      if (!trails) {
+        return reply
+          .status(ERROR404.statusCode)
+          .send({ message: ERROR404.message });
+      }
+      return reply.status(STANDARD.SUCCESS).send(trails);
+    } catch (e) {
+      sendServerError(request.log, reply, e);
+    }
+  }
 };
 
 export default trailsController;

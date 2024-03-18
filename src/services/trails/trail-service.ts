@@ -65,6 +65,7 @@ const trailsService = {
           "creator.trails",
           "creator._id",
           "creator.__v",
+          "users",
         ],
       }
     );
