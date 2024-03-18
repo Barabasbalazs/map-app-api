@@ -3,20 +3,20 @@ import trailModel, { Trail } from "../../models/trail-model.js";
 import { TrailQuery } from "../../@types/trail-query-type.js";
 import { ObjectId } from "bson";
 
+async function populateTrailWithCreator(trail: Trail | null) {
+  return trail ? await trail.populate("creator") : null;
+}
+
 const trailsService = {
   createTrail: async function (trail: Trail): Promise<Trail | null> {
     const storedTrail = await trailModel.create(trail);
-    if (!storedTrail) {
-      return null;
-    }
-    return await storedTrail.populate("creator");
+
+    return await populateTrailWithCreator(storedTrail);
   },
   getTrailById: async function (id: string): Promise<Trail | null> {
-    const trail = await trailModel.findById(id).populate("creator");
-    if (!trail) {
-      return null;
-    }
-    return trail;
+    const trail = await trailModel.findById(id);
+
+    return await populateTrailWithCreator(trail);
   },
   getTrails: async function (query: TrailQuery): Promise<Trail[] | null> {
     const { search, order, creator, sort } = query;
@@ -49,14 +49,25 @@ const trailsService = {
       });
     }
 
-    stages.push({
-      $lookup: {
-        from: "users",
-        localField: "creator",
-        foreignField: "_id",
-        as: "creator",
+    stages.push(
+      {
+        $lookup: {
+          from: "users",
+          localField: "creator",
+          foreignField: "_id",
+          as: "creator",
+        },
       },
-    });
+      { $set: { "creator.id": { $arrayElemAt: ["$creator._id", 0] } } },
+      {
+        $unset: [
+          "creator.password",
+          "creator.trails",
+          "creator._id",
+          "creator.__v",
+        ],
+      }
+    );
 
     return await trailModel.aggregate(stages);
   },
@@ -64,21 +75,17 @@ const trailsService = {
     id: string,
     trail: Partial<Trail>
   ): Promise<Trail | null> {
-    const updatedTrail = await trailModel
-      .findOneAndUpdate(
-        { _id: id },
-        {
-          $set: trail,
-        },
-        {
-          new: true,
-        }
-      )
-      .populate("creator");
-    if (!updatedTrail) {
-      return null;
-    }
-    return updatedTrail;
+    const updatedTrail = await trailModel.findOneAndUpdate(
+      { _id: id },
+      {
+        $set: trail,
+      },
+      {
+        new: true,
+      }
+    );
+
+    return await populateTrailWithCreator(updatedTrail);
   },
   deleteTrail: async function (id: string): Promise<Trail | null> {
     return await trailModel.findByIdAndDelete(id).populate("creator");
@@ -87,22 +94,21 @@ const trailsService = {
     trailId: string,
     userId: string
   ): Promise<Trail | null> {
-    return await trailModel
-      .findOneAndUpdate(
-        { _id: trailId },
-        { $pull: { users: new ObjectId(userId) } },
-        { new: true }
-      )
-      .populate("creator");
+    const deletedTrail = await trailModel.findOneAndUpdate(
+      { _id: trailId },
+      { $pull: { users: new ObjectId(userId) } },
+      { new: true }
+    );
+    return await populateTrailWithCreator(deletedTrail);
   },
   addUserToTrail: async function (userId: string, trailId: string) {
-    return await trailModel
-      .findOneAndUpdate(
-        { _id: trailId },
-        { $push: { users: new ObjectId(userId) } },
-        { new: true }
-      )
-      .populate("creator");
+    const updatedTrail = await trailModel.findOneAndUpdate(
+      { _id: trailId },
+      { $push: { users: new ObjectId(userId) } },
+      { new: true }
+    );
+
+    return await populateTrailWithCreator(updatedTrail);
   },
 };
 

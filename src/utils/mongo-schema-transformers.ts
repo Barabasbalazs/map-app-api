@@ -12,5 +12,8 @@ export function userSchemaTransformer(_doc: any, ret: any, _options: any) {
 
 export function trailSchemaTransformer(doc: any, ret: any, _options: any) {
   delete ret.users;
+  delete ret.creator.password;
+  delete ret.creator.trails;
+  ret.creator.id = ret.creator._id;
   baseTransformer(doc, ret, _options);
 }
