@@ -6,7 +6,6 @@ export function baseTransformer(_doc: any, ret: any, _options: any) {
 
 export function userSchemaTransformer(_doc: any, ret: any, _options: any) {
   delete ret.password;
-  delete ret.trails;
   baseTransformer(_doc, ret, _options);
 }
 
