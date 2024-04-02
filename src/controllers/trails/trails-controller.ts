@@ -12,7 +12,6 @@ import {
 import trailsService from "../../services/trails/trail-service.js";
 import userService from "../../services/user/user-service.js";
 import { sendServerError } from "../../utils/controller-util.js";
-import { request } from "http";
 
 const trailsController = {
   createTrail: async (
