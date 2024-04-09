@@ -86,7 +86,15 @@ const trailsRouter = async (fastify: FastifyInstance) => {
     url: "/subscribed",
     onRequest: fastify.asyncVerifyJWT,
     handler: trailsController.getSubscribedTrails,
-  })
+  });
+  fastify.route<{
+    Reply: Trail[];
+  }>({
+    method: "GET",
+    url: "/my-trails",
+    onRequest: fastify.asyncVerifyJWT,
+    handler: trailsController.getTrailsCreatedByUser,
+  });
 };
 
 export default trailsRouter;

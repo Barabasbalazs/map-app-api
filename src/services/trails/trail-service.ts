@@ -11,7 +11,8 @@ const trailsService = {
   createTrail: async function (trail: Trail): Promise<Trail | null> {
     const storedTrail = await trailModel.create(trail);
 
-    return await populateTrailWithCreator(storedTrail);
+    const newTrail = await populateTrailWithCreator(storedTrail);
+    return newTrail;
   },
   getTrailById: async function (id: string): Promise<Trail | null> {
     const trail = await trailModel.findById(id);
@@ -111,6 +112,10 @@ const trailsService = {
 
     return await populateTrailWithCreator(updatedTrail);
   },
+  getTrailsCreatedByUser: async function (userId: string) {
+    const trailResults = await trailModel.find({ creator: new ObjectId(userId) }).populate("creator");
+    return trailResults;
+  }
 };
 
 export default trailsService;

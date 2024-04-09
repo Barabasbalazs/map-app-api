@@ -234,6 +234,25 @@ const trailsController = {
     } catch (e) {
       sendServerError(request.log, reply, e);
     }
+  },
+  getTrailsCreatedByUser: async (request: FastifyRequest, reply: ApiReply<Trail[]>) => {
+    try { 
+      const user = request.user;
+      if (user.role !== "guide" || !user.id) {
+        return reply.status(ERROR401.statusCode).send({
+          message: "You are not authorized to get trails created by you",
+        });
+      }
+      const trails = await trailsService.getTrailsCreatedByUser(user.id);
+      if (!trails) {
+        return reply
+          .status(ERROR404.statusCode)
+          .send({ message: ERROR404.message });
+      }
+      return reply.status(STANDARD.SUCCESS).send(trails);
+    } catch (e) {
+      sendServerError(request.log, reply, e);
+    }
   }
 };
 
