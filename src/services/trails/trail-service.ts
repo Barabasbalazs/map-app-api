@@ -71,7 +71,12 @@ const trailsService = {
       }
     );
 
-    return await trailModel.aggregate(stages);
+    const arrayOfTrails = await trailModel.aggregate(stages);
+
+    return arrayOfTrails?.map((trail) => ({
+      ...trail,
+      creator: trail.creator[0],
+    }));
   },
   updateTrail: async function (
     id: string,
@@ -113,9 +118,11 @@ const trailsService = {
     return await populateTrailWithCreator(updatedTrail);
   },
   getTrailsCreatedByUser: async function (userId: string) {
-    const trailResults = await trailModel.find({ creator: new ObjectId(userId) }).populate("creator");
+    const trailResults = await trailModel
+      .find({ creator: new ObjectId(userId) })
+      .populate("creator");
     return trailResults;
-  }
+  },
 };
 
 export default trailsService;
