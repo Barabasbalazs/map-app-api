@@ -3,7 +3,6 @@ import ApiReply from "src/@types/reply-types.js";
 import { User } from "../../models/user-model.js";
 import userService from "../../services/user/user-service.js";
 import {
-  ERROR400,
   ERROR401,
   ERROR404,
   ERROR500,
@@ -59,6 +58,20 @@ const administrationController = {
       }
       return reply.status(STANDARD.SUCCESS).send(updatedUser);
     } catch (e) {
+      sendServerError(request.log, reply, e);
+    }
+  },
+  getAllUsers: async (request: FastifyRequest, reply: ApiReply<User[]>) => {
+    try {
+      const user = request.user;
+      if (user.role !== "admin") {
+        return reply
+          .status(ERROR401.statusCode)
+          .send({ message: "You are not authorized to view all users" });
+      }
+      const users = await userService.getAllUsers();
+      return reply.status(STANDARD.SUCCESS).send(users);
+    } catch(e) {
       sendServerError(request.log, reply, e);
     }
   },

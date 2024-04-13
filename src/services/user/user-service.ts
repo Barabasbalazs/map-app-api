@@ -70,6 +70,9 @@ const userService = {
       }
     );
   },
+  getAllUsers: async function () {
+    return await userModel.find();
+  },
 };
 
 export default userService;

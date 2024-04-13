@@ -13,7 +13,7 @@ const administrationSchema = {
       .prop("name", S.string())
       .without(["password", "role", "id", "_id"]),
     queryString: S.object(),
-    params: S.object(),
+    params: S.object().prop("id", S.string().required()),
     headers: S.object(),
   },
 };
