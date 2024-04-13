@@ -3,7 +3,8 @@ import administrationController from "../../controllers/administration/administr
 import administrationSchema from "./administration-schema.js";
 import { User } from "../../models/user-model.js";
 
-const { userIdSchema } = administrationSchema;
+const { getUser, updateUser } = administrationController;
+const { userIdSchema, partialUserSchema } = administrationSchema;
 
 const administrationRouter = async (fastify: FastifyInstance) => {
   fastify.route<{
@@ -13,8 +14,19 @@ const administrationRouter = async (fastify: FastifyInstance) => {
     method: "GET",
     onRequest: fastify.asyncVerifyJWT,
     url: "/users/:id",
-    handler: administrationController.getUser,
+    handler: getUser,
     schema: userIdSchema,
+  });
+  fastify.route<{
+    Params: { id: string };
+    Body: User;
+    Reply: User;
+  }>({
+    method: "PATCH",
+    onRequest: fastify.asyncVerifyJWT,
+    url: "/users/:id",
+    schema: partialUserSchema,
+    handler: updateUser,
   });
 };
 

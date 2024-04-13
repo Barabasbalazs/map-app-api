@@ -59,6 +59,17 @@ const userService = {
       },
     ]);
   },
+  updateUser: async function (userId: string, user: User) {
+    return await userModel.findOneAndUpdate(
+      { _id: userId },
+      {
+        $set: user,
+      },
+      {
+        new: true,
+      }
+    );
+  },
 };
 
 export default userService;
