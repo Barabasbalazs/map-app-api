@@ -71,7 +71,7 @@ const userService = {
     );
   },
   getAllUsers: async function () {
-    return await userModel.find();
+    return await userModel.find({ role: { $ne: "admin" } });
   },
 };
 

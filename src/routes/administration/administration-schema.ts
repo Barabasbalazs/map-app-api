@@ -1,4 +1,5 @@
 import { S } from "fluent-json-schema";
+import ROLES from "../../constants/roles.js";
 
 const administrationSchema = {
   userIdSchema: {
@@ -11,7 +12,8 @@ const administrationSchema = {
       .additionalProperties(false)
       .prop("email", S.string().format(S.FORMATS.EMAIL))
       .prop("name", S.string())
-      .without(["password", "role", "id", "_id"]),
+      .prop("role", S.string().enum(Object.values(ROLES)).default(ROLES.USER))
+      .without(["password", "id", "_id"]),
     queryString: S.object(),
     params: S.object().prop("id", S.string().required()),
     headers: S.object(),

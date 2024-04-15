@@ -1,10 +1,5 @@
 import { S } from "fluent-json-schema";
-
-const ROLES = {
-  ADMIN: "admin",
-  USER: "user",
-  GUIDE: "guide",
-};
+import ROLES from "../../constants/roles.js";
 
 const authSchema = {
   signupSchema: {
@@ -24,7 +19,7 @@ const authSchema = {
     queryString: S.object(),
     params: S.object(),
     headers: S.object(),
-  }
+  },
 };
 
 export default authSchema;

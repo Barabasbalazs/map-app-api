@@ -17,15 +17,13 @@ const administrationController = {
   ) => {
     try {
       const userFromRequest = request.user;
-      if (
-        userFromRequest.role === "guide" ||
-        (userFromRequest.role === "user" &&
-          userFromRequest._id.toString() !== request.params.id)
-      ) {
+
+      if (userFromRequest._id.toString() !== request.params.id) {
         return reply
           .status(ERROR401.statusCode)
           .send({ message: ERROR401.message });
       }
+
       const user = await userService.findById(request.params.id);
       if (!user) {
         return reply
@@ -50,6 +48,11 @@ const administrationController = {
           .status(ERROR401.statusCode)
           .send({ message: "You are not authorized to update this user" });
       }
+      if (requestUser.role !== "admin" && bodyUser.role) {
+        return reply
+          .status(ERROR401.statusCode)
+          .send({ message: "You are not authorized to update the role" });
+      }
       const updatedUser = await userService.updateUser(id, bodyUser);
       if (!updatedUser) {
         return reply.status(ERROR500.statusCode).send({
@@ -71,7 +74,7 @@ const administrationController = {
       }
       const users = await userService.getAllUsers();
       return reply.status(STANDARD.SUCCESS).send(users);
-    } catch(e) {
+    } catch (e) {
       sendServerError(request.log, reply, e);
     }
   },
