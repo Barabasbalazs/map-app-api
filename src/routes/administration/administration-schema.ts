@@ -12,7 +12,7 @@ const administrationSchema = {
       .additionalProperties(false)
       .prop("email", S.string().format(S.FORMATS.EMAIL))
       .prop("name", S.string())
-      .prop("role", S.string().enum(Object.values(ROLES)).default(ROLES.USER))
+      .prop("role", S.string().enum(Object.values(ROLES)))
       .without(["password", "id", "_id"]),
     queryString: S.object(),
     params: S.object().prop("id", S.string().required()),

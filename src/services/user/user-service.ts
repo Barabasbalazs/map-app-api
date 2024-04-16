@@ -59,7 +59,7 @@ const userService = {
       },
     ]);
   },
-  updateUser: async function (userId: string, user: User) {
+  updateUser: async function (userId: string, user: Partial<User>) {
     return await userModel.findOneAndUpdate(
       { _id: userId },
       {

@@ -36,13 +36,14 @@ const administrationController = {
     }
   },
   updateUser: async (
-    request: FastifyRequest<{ Params: { id: string }; Body: User }>,
+    request: FastifyRequest<{ Params: { id: string }; Body: Partial<User>}>,
     reply: ApiReply<User>
   ) => {
     try {
       const id = request.params.id;
       const requestUser = request.user;
       const bodyUser = request.body;
+
       if (id !== requestUser._id.toString() && requestUser.role !== "admin") {
         return reply
           .status(ERROR401.statusCode)

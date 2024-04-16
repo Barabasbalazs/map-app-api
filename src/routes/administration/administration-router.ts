@@ -19,7 +19,7 @@ const administrationRouter = async (fastify: FastifyInstance) => {
   });
   fastify.route<{
     Params: { id: string };
-    Body: User;
+    Body: Partial<User>;
     Reply: User;
   }>({
     method: "PATCH",
