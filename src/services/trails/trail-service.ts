@@ -123,6 +123,9 @@ const trailsService = {
       .populate("creator");
     return trailResults;
   },
+  deleteTrailsByCreator: async function (userId: string) {
+    return await trailModel.deleteMany({ creator: new ObjectId(userId) });
+  },
 };
 
 export default trailsService;

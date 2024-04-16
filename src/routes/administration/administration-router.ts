@@ -3,7 +3,8 @@ import administrationController from "../../controllers/administration/administr
 import administrationSchema from "./administration-schema.js";
 import { User } from "../../models/user-model.js";
 
-const { getUser, updateUser, getAllUsers } = administrationController;
+const { getUser, updateUser, getAllUsers, deleteUser } =
+  administrationController;
 const { userIdSchema, partialUserSchema } = administrationSchema;
 
 const administrationRouter = async (fastify: FastifyInstance) => {
@@ -27,6 +28,16 @@ const administrationRouter = async (fastify: FastifyInstance) => {
     url: "/users/:id",
     schema: partialUserSchema,
     handler: updateUser,
+  });
+  fastify.route<{
+    Params: { id: string };
+    Reply: { message: string };
+  }>({
+    method: "DELETE",
+    onRequest: fastify.asyncVerifyJWT,
+    url: "/users/:id",
+    schema: userIdSchema,
+    handler: deleteUser,
   });
   fastify.route<{
     Reply: User[];

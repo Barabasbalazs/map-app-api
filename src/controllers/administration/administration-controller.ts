@@ -2,6 +2,7 @@ import { FastifyRequest } from "fastify";
 import ApiReply from "src/@types/reply-types.js";
 import { User } from "../../models/user-model.js";
 import userService from "../../services/user/user-service.js";
+import trailsService from "../../services/trails/trail-service.js";
 import {
   ERROR401,
   ERROR404,
@@ -36,7 +37,7 @@ const administrationController = {
     }
   },
   updateUser: async (
-    request: FastifyRequest<{ Params: { id: string }; Body: Partial<User>}>,
+    request: FastifyRequest<{ Params: { id: string }; Body: Partial<User> }>,
     reply: ApiReply<User>
   ) => {
     try {
@@ -75,6 +76,34 @@ const administrationController = {
       }
       const users = await userService.getAllUsers();
       return reply.status(STANDARD.SUCCESS).send(users);
+    } catch (e) {
+      sendServerError(request.log, reply, e);
+    }
+  },
+  deleteUser: async (
+    request: FastifyRequest<{ Params: { id: string } }>,
+    reply: ApiReply<{ message: string }>
+  ) => {
+    try {
+      const requestUser = request.user;
+      if (
+        requestUser._id.toString() !== request.params.id &&
+        requestUser.role !== "admin"
+      ) {
+        return reply
+          .status(ERROR401.statusCode)
+          .send({ message: ERROR401.message });
+      }
+      if (requestUser.role === "guide") {
+        await trailsService.deleteTrailsByCreator(request.params.id);
+      }
+      const result = await userService.deleteUser(request.params.id);
+      if (!result.deletedCount) {
+        return reply
+          .status(ERROR500.statusCode)
+          .send({ message: ERROR500.message });
+      }
+      return reply.status(STANDARD.SUCCESS).send({ message: "User deleted" });
     } catch (e) {
       sendServerError(request.log, reply, e);
     }
