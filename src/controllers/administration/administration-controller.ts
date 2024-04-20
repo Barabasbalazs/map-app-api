@@ -1,5 +1,5 @@
 import { FastifyRequest } from "fastify";
-import ApiReply from "src/@types/reply-types.js";
+import ApiReply from "../../@types/reply-types.js";
 import { User } from "../../models/user-model.js";
 import userService from "../../services/user/user-service.js";
 import trailsService from "../../services/trails/trail-service.js";

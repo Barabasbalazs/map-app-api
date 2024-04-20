@@ -15,3 +15,13 @@ export function trailSchemaTransformer(doc: any, ret: any, _options: any) {
   ret.creator.id = ret.creator._id;
   baseTransformer(doc, ret, _options);
 }
+
+export function adminRequestSchemaTransformer(
+  doc: any,
+  ret: any,
+  _options: any
+) {
+  ret.user.id = ret.user._id;
+  delete ret.user.trails;
+  baseTransformer(doc, ret, _options);
+}
