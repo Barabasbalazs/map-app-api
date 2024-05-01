@@ -71,7 +71,7 @@ const userService = {
     );
   },
   getAllUsers: async function () {
-    return await userModel.find({ role: { $ne: "admin" } });
+    return await userModel.find();
   },
   deleteUser: async function (userId: string) {
     return await userModel.deleteOne({ _id: userId });
