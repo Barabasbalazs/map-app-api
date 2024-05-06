@@ -59,6 +59,40 @@ const trailsController = {
       sendServerError(request.log, reply, e);
     }
   },
+  getTrailById: async (
+    request: FastifyRequest<{ Params: { id: string } }>,
+    reply: ApiReply<Trail>
+  ) => {
+    try {
+      const user = request.user;
+      const trail = await trailsService.getTrailById(request.params.id);
+
+      if (!trail) {
+        return reply
+          .status(ERROR404.statusCode)
+          .send({ message: ERROR404.message });
+      }
+
+      if (
+        user.role === "guide" &&
+        (trail?.creator as User)?._id?.toString() !== user.id
+      ) {
+        return reply.status(ERROR401.statusCode).send({
+          message: "You are not authorized to view this trail",
+        });
+      }
+
+      if (user.role === "user" && trail && !trail.users.includes(user._id)) {
+        return reply.status(ERROR401.statusCode).send({
+          message: "You are not authorized to view this trail",
+        });
+      }
+
+      return reply.status(STANDARD.SUCCESS).send(trail);
+    } catch (e) {
+      sendServerError(request.log, reply, e);
+    }
+  },
   updateTrail: async (
     request: FastifyRequest<{
       Params: { id: string };
@@ -213,7 +247,7 @@ const trailsController = {
       sendServerError(request.log, reply, e);
     }
   },
-  getSubscribedTrails: async(
+  getSubscribedTrails: async (
     request: FastifyRequest,
     reply: ApiReply<Trail[]>
   ) => {
@@ -235,8 +269,11 @@ const trailsController = {
       sendServerError(request.log, reply, e);
     }
   },
-  getTrailsCreatedByUser: async (request: FastifyRequest, reply: ApiReply<Trail[]>) => {
-    try { 
+  getTrailsCreatedByUser: async (
+    request: FastifyRequest,
+    reply: ApiReply<Trail[]>
+  ) => {
+    try {
       const user = request.user;
       if (user.role !== "guide" || !user.id) {
         return reply.status(ERROR401.statusCode).send({
@@ -253,7 +290,7 @@ const trailsController = {
     } catch (e) {
       sendServerError(request.log, reply, e);
     }
-  }
+  },
 };
 
 export default trailsController;

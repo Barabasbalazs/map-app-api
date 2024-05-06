@@ -34,6 +34,17 @@ const trailsRouter = async (fastify: FastifyInstance) => {
       schema: createTrailSchema,
       handler: trailsController.createTrail,
     });
+
+  fastify.route<{
+    Params: { id: string };
+    Reply: Trail;
+  }>({
+    method: "GET",
+    url: "/:id",
+    schema: trailIdSchema,
+    onRequest: fastify.asyncVerifyJWT,
+    handler: trailsController.getTrailById,
+  });
   //Updating the trail by id, for creators of the trail
   fastify.route<{
     Params: { id: string };
