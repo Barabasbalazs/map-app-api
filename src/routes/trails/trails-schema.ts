@@ -18,6 +18,7 @@ const trailSchema = {
               .prop("coordinates", coordinatesSchema)
               .required()
           )
+          .minItems(2)
           .required()
       )
       .prop("users", S.array().items(S.string())),
@@ -48,7 +49,7 @@ const trailSchema = {
             .prop("name", S.string().required())
             .prop("coordinates", coordinatesSchema)
             .required()
-        )
+        ).minItems(2)
       ),
     queryString: S.object(),
     params: S.object().prop("id", S.string().required()),
