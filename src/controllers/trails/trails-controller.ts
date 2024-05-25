@@ -230,7 +230,7 @@ const trailsController = {
           .status(ERROR404.statusCode)
           .send({ message: ERROR404.message });
       }
-      if ((persistedTrail.creator as User)._id.toString() !== user.id) {
+      if ((persistedTrail.creator as User)._id.toString() !== user.id && user.role !== "admin") {
         return reply.status(ERROR401.statusCode).send({
           message: "You are not authorized to delete this trail",
         });
